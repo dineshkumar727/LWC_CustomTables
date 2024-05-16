@@ -1,0 +1,73 @@
+<template>  
+ 
+    <div class="slds-page-header slds-page-header_record-home">
+    <div class="slds-grid slds-wrap">      
+        <div class="slds-col slds-size_4-of-6">
+        <div class="slds-page-header__row">
+            <div class="slds-page-header__col-title">
+            <div class="slds-media">
+                <div class="slds-media__figure">
+                    <lightning-icon slot="media" icon-name="standard:account" size="medium" class="icon_custom_class">
+                        </lightning-icon>
+                </div>
+                 <div class="slds-media__body">
+                    <p class="slds-page-header__name-meta">Accounts</p>
+                    <div class="slds-page-header__name">
+                      <div class="slds-page-header__name-title">
+                        <h1>
+                          <span class="slds-page-header__title slds-truncate" title=" Accounts I Follow"> Accounts I Follow</span>
+                        </h1>
+                      </div>
+                    </div>
+                  </div>
+            </div>
+            </div>
+        </div>
+        <div style="padding-top: 29px">
+            {totalNumberOfRows} items • Sorted by {displayValue} • Filtered by Accounts I Follow 
+        </div>   
+           
+        </div>
+        <div class="slds-col slds-size_1-of-6">
+           
+        </div>
+        <div class="slds-col slds-size_1-of-6 slds-text-align_right">   
+            <div class="slds-p-around_xx-small">   
+                <button class="slds-button slds-button_neutral" onclick={close} style="bottom: -11px;" >Return to List View</button>         
+         <lightning-input 
+                type="search" 
+                onchange={handleKeyChange}                
+                placeholder="Search this list..." 
+                value={searchKey}>
+            </lightning-input>
+            </div>
+        </div>        
+    </div>
+    <div class="slds-col slds-size_1-of-1 slds-border_top" style="height:650px;">
+        <template if:false={isLoaded}>
+            <div class="spinner_class_div">
+                <lightning-spinner class="spinner_class" alternative-text="Loading" variant="brand">
+                </lightning-spinner>
+            </div>
+        </template>
+        <template if:false={isNoRecordsFound}>
+            <lightning-datatable 
+                data-id="table" 
+                key-field="Id" 
+                data={prioritizedAccountList} 
+                columns={columns} 
+                sorted-by={sortedBy}
+                sorted-direction={sortedDirection}                                
+                onsort={sortColumns}
+                show-row-number-column="true"
+                onloadmore={handleLoadMore}
+                enable-infinite-loading={enableInfinitLoading}
+                hide-checkbox-column="true">
+            </lightning-datatable>
+        </template>
+        <template if:true={isNoRecordsFound}>
+            <div  style="color:red;font-weight:bold;font-size: 15px;text-decoration: underline;text-align:center"> No Accounts Followed yet !! </div>
+        </template>
+        </div> 
+    </div>
+</template>
