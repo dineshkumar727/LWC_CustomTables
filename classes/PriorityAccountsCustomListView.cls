@@ -1,16 +1,12 @@
-/**
- * @description - trigger helper for the building object.
- * @author - PWC            
- * @date - October 6, 2022
- */
-public class CRM_PriorityAccountsCustomListView {
+
+public class PriorityAccountsCustomListView {
     
     static String userId = UserInfo.getUserId();
     static String accountObject = 'Account';
     static  String dynamicQueryString;
     static List<Id> accountIds;
-    static List<CRM_PriorityAccounts_CustomListView__mdt> accountMdtList; 
-    static String customerAccountRecTypeDevName = 'CRM_Customer_Account';
+    static List<PriorityAccounts_CustomListView__mdt> accountMdtList; 
+    static String customerAccountRecTypeDevName = 'PersonAccount';
     
     /**
     * @methodName - getPrioritizedAccounts
@@ -34,7 +30,7 @@ public class CRM_PriorityAccountsCustomListView {
             loadMoreaccountsList = Database.query(dynamicQueryString); 
            
         }catch(Exception ex){            
-            CRM_ExceptionService.createExceptionLog( ex,'Apex','CRM_PriorityAccountsCustomListView','getPrioritizedAccounts');
+            //ExceptionService.createExceptionLog( ex,'Apex','PriorityAccountsCustomListView','getPrioritizedAccounts');
             throw new AuraHandledException('Something went wrong, Please contact system adminstrator');
         } 
        return loadMoreaccountsList;
@@ -50,14 +46,14 @@ public class CRM_PriorityAccountsCustomListView {
     private static String prepareDymaicAccountTableColumns(){
        
         dynamicQueryString = 'SELECT Id,';          
-            accountMdtList = new List<CRM_PriorityAccounts_CustomListView__mdt>();
+            accountMdtList = new List<PriorityAccounts_CustomListView__mdt>();
         
-            for(CRM_PriorityAccounts_CustomListView__mdt objMdt :[SELECT Label,CRM_Field_API_Name__c,CRM_Is_Active__c 
-                                                                  FROM CRM_PriorityAccounts_CustomListView__mdt 
-                                                                  WHERE CRM_Is_Active__c = true Order By Label ASC]){
-                if(string.isNotBlank(objMdt.CRM_Field_API_Name__c)){
+            for(PriorityAccounts_CustomListView__mdt objMdt :[SELECT Label,Field_API_Name__c,Is_Active__c 
+                                                                  FROM PriorityAccounts_CustomListView__mdt 
+                                                                  WHERE Is_Active__c = true Order By Label ASC]){
+                if(string.isNotBlank(objMdt.Field_API_Name__c)){
                     
-                    dynamicQueryString += objMdt.CRM_Field_API_Name__c +',';
+                    dynamicQueryString += objMdt.Field_API_Name__c +',';
                     accountMdtList.add(objMdt);                                                       
                 }
             }
@@ -111,7 +107,7 @@ public class CRM_PriorityAccountsCustomListView {
     public class AccIdsAndDynamicQuery{
         @AuraEnabled public List<Id> accountIdsList;
         @AuraEnabled Public String dynamicQueryString;
-        @AuraEnabled Public List<CRM_PriorityAccounts_CustomListView__mdt> accountMdtList;
+        @AuraEnabled Public List<PriorityAccounts_CustomListView__mdt> accountMdtList;
     }
    
 }

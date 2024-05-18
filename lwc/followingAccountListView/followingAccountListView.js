@@ -1,10 +1,10 @@
 import { LightningElement, api, track, wire } from 'lwc';
 
 import { ShowToastEvent } from 'lightning/platformShowToastEvent';
-import getPrioritizedAccounts from '@salesforce/apex/CRM_PriorityAccountsCustomListView.getPrioritizedAccounts';
-import fetchAccIdsFrmEntrySubOb from '@salesforce/apex/CRM_PriorityAccountsCustomListView.fetchAccIdsFrmEntrySubOb';
+import getPrioritizedAccounts from '@salesforce/apex/PriorityAccountsCustomListView.getPrioritizedAccounts';
+import fetchAccIdsFrmEntrySubOb from '@salesforce/apex/PriorityAccountsCustomListView.fetchAccIdsFrmEntrySubOb';
 
-export default class crm_PriorityAccountsCustomListView extends LightningElement {
+export default class PriorityAccountsCustomListView extends LightningElement {
 
 
 @track error;
@@ -185,9 +185,9 @@ prepareDynamicColumnsForDataTable(){
         subFields.forEach((record) => {
             let tmpRecord = new Object ; 
             tmpRecord.label = record.Label;
-            tmpRecord.fieldName = record.CRM_Field_API_Name__c
-            if(record.CRM_Field_API_Name__c.includes(".")){
-                this.relationShipFields.push(record.CRM_Field_API_Name__c);
+            tmpRecord.fieldName = record.Field_API_Name__c
+            if(record.Field_API_Name__c.includes(".")){
+                this.relationShipFields.push(record.Field_API_Name__c);
             }
             tmpRecord = this.prepareColumnsForRelFields(tmpRecord,record);
             this.mapFieldAPINameToFieldLabel.push({value:record.Label, key:tmpRecord.fieldName});
@@ -198,27 +198,27 @@ prepareDynamicColumnsForDataTable(){
 }
 prepareColumnsForRelFields(tmpRecord,record) {
 
-    if(record.CRM_Field_API_Name__c.includes(".")){
-        if(record.CRM_Field_API_Name__c != 'RecordType.Name'){
+    if(record.Field_API_Name__c.includes(".")){
+        if(record.Field_API_Name__c != 'RecordType.Name'){
 
-            let modifiedFiledName = record.CRM_Field_API_Name__c.split(".").join("").replace ("__r", "").replace("_", "");
+            let modifiedFiledName = record.Field_API_Name__c.split(".").join("").replace ("__r", "").replace("_", "");
             tmpRecord.fieldName = 'link'+modifiedFiledName;
             tmpRecord.type = 'url';
             this.prepareInnerObject(tmpRecord,modifiedFiledName);
 
         }else{
 
-            let modifiedFiledName = record.CRM_Field_API_Name__c.split(".").join("").replace ("__r", "").replace("_", "");
+            let modifiedFiledName = record.Field_API_Name__c.split(".").join("").replace ("__r", "").replace("_", "");
             tmpRecord.fieldName = modifiedFiledName;
             tmpRecord.type = 'text'; 
         }
     }
-    if(!record.CRM_Field_API_Name__c.includes(".")){
-        if(record.CRM_Field_API_Name__c == 'Name'){
+    if(!record.Field_API_Name__c.includes(".")){
+        if(record.Field_API_Name__c == 'Name'){
 
             tmpRecord.fieldName = 'AccountName';
             tmpRecord.type = 'url';
-            this.prepareInnerObject(tmpRecord,record.CRM_Field_API_Name__c); 
+            this.prepareInnerObject(tmpRecord,record.Field_API_Name__c); 
 
         }else{
 
